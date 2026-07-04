@@ -67,11 +67,11 @@ SSH, no scripts, no cron required.
 
 - **Canonical channel list** — you decide which channels exist, their groups and
   their order.
-- **Substring matching, longest-wins** — `SKY SPORT 24` is matched before
-  `SKY SPORT`, so the most specific channel always wins and every stream is
+- **Substring matching, longest-wins** — `skx SPORT 24` is matched before
+  `skx SPORT`, so the most specific channel always wins and every stream is
   assigned exactly once.
 - **Aliases** — normalise inconsistent naming before matching
-  (e.g. `SKY TG 24` → `SKY TG24`).
+  (e.g. `skx TG 24` → `skx TG24`).
 - **Exclusions** — drop specific streams by exact name (e.g. a dead SD feed).
 - **Quality ordering** — 4K/UHD/HEVC → Full HD → HD → SD, XC before STD, so
   failover always tries the best source first.
@@ -129,8 +129,8 @@ SSH, no scripts, no cron required.
 ```json
 {
   "🇮🇹 TOP ITALIA": ["RAI 1", "RAI 2", "RAI 3", "RETE 4", "CANALE 5", "ITALIA 1"],
-  "📰 NOTIZIE": ["SKY TG24", "TGCOM24", "RAI NEWS 24"],
-  "🔥 DAZN": ["DAZN 1", "ZONA DAZN"]
+  "📰 NOTIZIE": ["SKx TG24", "TGCOM24", "RAI NEWS 24"],
+  "🔥 DAxx": ["DAxx 1", "ZONA DAxx"]
 }
 ```
 
@@ -145,13 +145,13 @@ name **before** matching. Use them to reconcile provider naming quirks:
 
 ```json
 {
-  "SKY TG 24": "SKY TG24",
+  "SKx TG 24": "SKx TG24",
   "RAI NEWS24": "RAI NEWS 24"
 }
 ```
 
-Example: a stream named `SKY TG 24 HD` becomes `SKY TG24 HD`, which then matches
-the canonical `SKY TG24`. Rules are applied longest-first, so more specific
+Example: a stream named `SKx TG 24 HD` becomes `SKx TG24 HD`, which then matches
+the canonical `SKx TG24`. Rules are applied longest-first, so more specific
 rules win.
 
 ### Exclusions (`exclude_json`)
@@ -161,15 +161,15 @@ alias and match. Handy to keep only the good feeds of a channel:
 
 ```json
 [
-  "SKY UNO 4K HEVC H265",
-  "SKY UNO FULL HD",
-  "SKY UNO HD",
-  "SKY UNO SD"
+  "SKx UNO 4K HEVC H265",
+  "SKx UNO FULL HD",
+  "SKx UNO HD",
+  "SKx UNO SD"
 ]
 ```
 
-With the list above, only `[S+] SKY UNO …` variants survive for the SKY UNO
-channel; every other SKY UNO feed is discarded.
+With the list above, only `[S+] SKx UNO …` variants survive for the SKx UNO
+channel; every other SKx UNO feed is discarded.
 
 ---
 
@@ -183,7 +183,7 @@ For each active stream:
 3. **Normalise** — uppercase, collapse multiple spaces to one.
 4. **Match** — find the first canonical channel (canonical names sorted by
    length, descending) whose normalised name is a **substring** of the stream
-   name. Longest canonical name wins, so `SKY SPORT 24` beats `SKY SPORT`.
+   name. Longest canonical name wins, so `skx SPORT 24` beats `skx SPORT`.
 5. **Unmatched** — the stream goes to the "Other Channels" group, grouped with
    other streams sharing the same uppercased name.
 
@@ -197,16 +197,16 @@ so failover always starts from the best available source.
 
 ### Worked example
 
-Canonical: `"📰 NOTIZIE": ["SKY TG24"]`, alias `{"SKY TG 24": "SKY TG24"}`.
+Canonical: `"📰 NOTIZIE": ["skx TG24"]`, alias `{"skx TG 24": "skx TG24"}`.
 
 | Stream (source) | After alias+norm | Result |
 |-----------------|------------------|--------|
-| `SKY TG 24 4K HEVC H265` (camcam, XC) | `SKY TG24 4K HEVC H265` | SKY TG24, quality 0 |
-| `[S+] SKY TG24 FULL HD` (antitesi, XC) | `[S+] SKY TG24 FULL HD` | SKY TG24, quality 1 |
-| `SKY TG 24 HD` (list, STD) | `SKY TG24 HD` | SKY TG24, quality 2 (after XC) |
+| `skx TG 24 4K HEVC H265` (camcam, XC) | `skx TG24 4K HEVC H265` | skx TG24, quality 0 |
+| `[S+] skx TG24 FULL HD` (antitesi, XC) | `[S+] skx TG24 FULL HD` | skx TG24, quality 1 |
+| `skx TG 24 HD` (list, STD) | `skx TG24 HD` | skx TG24, quality 2 (after XC) |
 | `TG NORBA 24 HD` | `TG NORBA 24 HD` | not matched → Other Channels |
 
-All SKY TG24 feeds collapse into one channel with correct failover order;
+All skx TG24 feeds collapse into one channel with correct failover order;
 `TG NORBA 24` is left untouched.
 
 ---
