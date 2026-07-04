@@ -1,0 +1,68 @@
+{
+  "name": "Setup Canali (Canonico)",
+  "version": "1.0.0",
+  "description": "Costruisce i canali da una lista canonica: match per substring (piu lungo vince), alias di rename, esclusione stream, ordinamento per qualita (4K>FHD>HD>SD) con XC prima di STD. Gli stream non riconosciuti vanno in 'Altri Canali'.",
+  "author": "francescodg89",
+  "fields": [
+    {
+      "id": "profile_name",
+      "label": "Nome profilo canali",
+      "type": "string",
+      "default": "IPTV",
+      "help_text": "Il profilo che verra ricostruito e assegnato agli utenti."
+    },
+    {
+      "id": "other_group",
+      "label": "Gruppo per stream non riconosciuti",
+      "type": "string",
+      "default": "\ud83d\udd35 Altri Canali"
+    },
+    {
+      "id": "users_list",
+      "label": "Utenti a cui assegnare il profilo",
+      "type": "string",
+      "default": "",
+      "help_text": "Username separati da virgola (es: davide, antitesi, bianco). Lascia VUOTO per assegnarlo a TUTTI gli utenti. Gli utenti non elencati NON vedranno questi canali (il profilo viene rimosso da loro)."
+    },
+    {
+      "id": "canali_json",
+      "label": "Lista canonica canali (JSON: {gruppo: [canali]})",
+      "type": "string",
+      "default": "{}",
+      "help_text": "Oggetto JSON. Chiave = nome gruppo, valore = lista di nomi canale nell'ordine desiderato."
+    },
+    {
+      "id": "alias_json",
+      "label": "Alias / rename (JSON: {cerca: sostituisci})",
+      "type": "string",
+      "default": "{}",
+      "help_text": "Sostituzioni testo (case-insensitive) applicate al nome stream PRIMA del match. Es: {\"SKY TG 24\": \"SKY TG24\"}"
+    },
+    {
+      "id": "exclude_json",
+      "label": "Stream da escludere (JSON: [nomi esatti])",
+      "type": "string",
+      "default": "[]",
+      "help_text": "Lista di nomi stream esatti (come nel DB) da scartare. Es: [\"SKY UNO HD\", \"SKY UNO SD\"]"
+    }
+  ],
+  "actions": [
+    {
+      "id": "dry_run",
+      "label": "Anteprima (Dry-run)",
+      "description": "Mostra quanti stream verrebbero assegnati, senza modificare nulla.",
+      "button_label": "Anteprima",
+      "button_variant": "default",
+      "button_color": "blue"
+    },
+    {
+      "id": "rebuild",
+      "label": "Ricostruisci canali",
+      "description": "Cancella il profilo, ricrea tutti i canali dalla lista canonica e li assegna agli utenti.",
+      "button_label": "Ricostruisci",
+      "button_variant": "filled",
+      "button_color": "red",
+      "confirm": true
+    }
+  ]
+}
